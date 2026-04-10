@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的作品集</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            line-height: 1.6;
+            width: 100%;
+        }
+
+        /* 导航栏样式 */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #eee;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* 核心网格容器：响应式列数+无缝拼接+全屏充满 */
+        .grid-container {
+            display: grid;
+            grid-gap: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 大屏（≥1200px）：6列 */
+        @media (min-width: 1200px) {
+            .grid-container {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        /* 中屏（≥768px 且 <1200px）：4列 */
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .grid-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* 小屏（<768px）：2列 */
+        @media (max-width: 767px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            nav ul {
+                gap: 1rem;
+            }
+        }
+
+        /* 基础格子：1:1正方形比例 */
+        .grid-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1/1;
+        }
+
+        /* 竖占2格（1×2，1:2竖版） */
+        .grid-item.tall {
+            aspect-ratio: 1/2;
+            grid-row: span 2;
+        }
+
+        /* 横占2格（2×1，2:1横版） */
+        .grid-item.wide {
+            aspect-ratio: 2/1;
+            grid-column: span 2;
+        }
+
+        /* 占4格（2×2，1:1大正方形） */
+        .grid-item.large {
+            aspect-ratio: 1/1;
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        /* 封面图：填满格子并保持比例 */
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 左下角简介文字（恢复原样式） */
+        .item-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 0 0.5rem;
+            background: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            color: #333;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.05em;
+            vertical-align: baseline;
+        }
+
+        /* 链接样式 */
+        .grid-item a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Jonvi</div>
+        <nav>
+            <ul>
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#clients">客户案例</a></li>
+                <li><a href="#terms">服务条款</a></li>
+                <li><a href="#filter">作品筛选</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="grid-container">
+        <!-- 普通单格（1×1） -->
+        <div class="grid-item">
+            <a href="page1.html">
+                <img src="https://picsum.photos/600/600?random=1" alt="城市街拍">
+                <div class="item-info">城市街拍</div>
+            </a>
+        </div>
+
+        <!-- 竖占2格（1×2） -->
+        <div class="grid-item tall">
+            <a href="page2.html">
+                <img src="https://picsum.photos/300/600?random=2" alt="人像写真">
+                <div class="item-info">人像写真</div>
+            </a>
+        </div>
+
+        <!-- 横占2格（2×1） -->
+        <div class="grid-item wide">
+            <a href="page3.html">
+                <img src="https://picsum.photos/600/300?random=3" alt="横版风景">
+                <div class="item-info">横版风景</div>
+            </a>
+        </div>
+
+        <!-- 普通单格（1×1） -->
+        <div class="grid-item">
+            <a href="page4.html">
+                <img src="https://picsum.photos/600/600?random=4" alt="生活碎片">
+                <div class="item-info">生活碎片</div>
+            </a>
+        </div>
+
+        <!-- 占4格（2×2） -->
+        <div class="grid-item large">
+            <a href="page5.html">
+                <img src="https://picsum.photos/600/600?random=5" alt="重点作品">
+                <div class="item-info">年度重点作品</div>
+            </a>
+        </div>
+
+        <!-- 竖占2格（1×2） -->
+        <div class="grid-item tall">
+            <a href="page6.html">
+                <img src="https://picsum.photos/300/600?random=6" alt="建筑细节">
+                <div class="item-info">建筑细节</div>
+            </a>
+        </div>
+
+        <!-- 横占2格（2×1） -->
+        <div class="grid-item wide">
+            <a href="page7.html">
+                <img src="https://picsum.photos/600/300?random=7" alt="海边日落">
+                <div class="item-info">海边日落（横版）</div>
+            </a>
+        </div>
+
+        <!-- 普通单格（1×1） -->
+        <div class="grid-item">
+            <a href="page8.html">
+                <img src="https://picsum.photos/600/600?random=8" alt="静物摄影">
+                <div class="item-info">静物摄影</div>
+            </a>
+        </div>
+    </main>
+</body>
+</html>
