@@ -1,2 +1,0 @@
-# jonvi.github.io
-Jonvi
