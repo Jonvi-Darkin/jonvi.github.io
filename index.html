@@ -3,225 +3,963 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的作品集</title>
+    <title>行政仓库管理系统</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: "Microsoft YaHei", sans-serif;
         }
-
         body {
-            background-color: #fff;
-            line-height: 1.6;
-            width: 100%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
-        /* 导航栏样式 */
-        header {
+        .system-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #e3e3e3;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background-color: #3498db;
+            color: #fff;
+        }
+        .tab-btn:hover {
+            background-color: #d1d1d1;
+        }
+        .content-module {
+            display: none;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .content-module.show {
+            display: block;
+        }
+        .module-title {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #eee;
-            width: 100%;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2196F3;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            text-decoration: none;
+        .form-group label {
+            width: 130px;
+            font-weight: 500;
             color: #333;
-            font-size: 0.9rem;
-            text-transform: uppercase;
         }
-
-        /* 核心网格容器：响应式列数+无缝拼接+全屏充满 */
-        .grid-container {
-            display: grid;
-            grid-gap: 0;
-            width: 100%;
-            margin: 0;
-            padding: 0;
+        input, select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 200px;
         }
-
-        /* 大屏（≥1200px）：6列 */
-        @media (min-width: 1200px) {
-            .grid-container {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        /* 中屏（≥768px 且 <1200px）：4列 */
-        @media (min-width: 768px) and (max-width: 1199px) {
-            .grid-container {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        /* 小屏（<768px）：2列 */
-        @media (max-width: 767px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            nav ul {
-                gap: 1rem;
-            }
-        }
-
-        /* 基础格子：1:1正方形比例 */
-        .grid-item {
-            position: relative;
-            overflow: hidden;
+        .operate-btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            aspect-ratio: 1/1;
-        }
-
-        /* 竖占2格（1×2，1:2竖版） */
-        .grid-item.tall {
-            aspect-ratio: 1/2;
-            grid-row: span 2;
-        }
-
-        /* 横占2格（2×1，2:1横版） */
-        .grid-item.wide {
-            aspect-ratio: 2/1;
-            grid-column: span 2;
-        }
-
-        /* 占4格（2×2，1:1大正方形） */
-        .grid-item.large {
-            aspect-ratio: 1/1;
-            grid-column: span 2;
-            grid-row: span 2;
-        }
-
-        /* 封面图：填满格子并保持比例 */
-        .grid-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .grid-item:hover img {
-            transform: scale(1.05);
-        }
-
-        /* 左下角简介文字（恢复原样式） */
-        .item-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            padding: 0 0.5rem;
-            background: rgba(255, 255, 255, 0.6);
-            font-size: 0.85rem;
-            color: #333;
-            max-width: 100%;
+            font-size: 14px;
+            transition: all 0.2s ease;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.05em;
-            vertical-align: baseline;
         }
-
-        /* 链接样式 */
-        .grid-item a {
-            display: block;
+        .add-btn { background-color: #2ecc71; color: #fff; }
+        .edit-btn { background-color: #3498db; color: #fff; margin-right:5px; }
+        .del-btn { background-color: #e74c3d; color: #fff; }
+        .submit-btn { background-color: #3498db; color: #fff; }
+        .export-btn { background-color: #f39c12; color: #fff; margin-left: 10px; }
+        .warn-btn { background-color: #e67e22; color: #fff; }
+        .danger-btn { background-color: #c0392b; color: #fff; }
+        .operate-btn:hover { opacity: 0.9; }
+        .table-box {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .data-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        .data-table tr:nth-child(even) { background-color: #fafafa; }
+        .data-table tr:hover { background-color: #f1f4f8; }
+        .query-area {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .file-input { display: none; }
+        .price-info {
+            color: #666;
+            font-size:13px;
+            margin-top:5px;
+        }
+        .low-stock {
+            color: #e74c3d;
+            font-weight: bold;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            text-decoration: none;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            width: 400px;
+        }
+        .modal-title {
+            margin-bottom: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .unit-text {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: #f5f5f5;
+            border-radius: 4px;
+            min-width: 80px;
+            text-align: center;
         }
     </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-    <header>
-        <div class="logo">Jonvi</div>
-        <nav>
-            <ul>
-                <li><a href="#about">关于我</a></li>
-                <li><a href="#clients">客户案例</a></li>
-                <li><a href="#terms">服务条款</a></li>
-                <li><a href="#filter">作品筛选</a></li>
-            </ul>
-        </nav>
-    </header>
+    <h1 class="system-title">行政仓库管理系统V1.0</h1>
 
-    <main class="grid-container">
-        <!-- 普通单格（1×1） -->
-        <div class="grid-item">
-            <a href="page1.html">
-                <img src="https://picsum.photos/600/600?random=1" alt="城市街拍">
-                <div class="item-info">城市街拍</div>
-            </a>
-        </div>
+    <div class="tab-nav">
+        <button class="tab-btn" data-module="dept">部门管理</button>
+        <button class="tab-btn" data-module="goods">货品清单</button>
+        <button class="tab-btn active" data-module="stock">当前库存</button>
+        <button class="tab-btn" data-module="stockIn">入库登记</button>
+        <button class="tab-btn" data-module="stockOut">出库登记</button>
+        <button class="tab-btn" data-module="query">汇总查询</button>
+        <button class="tab-btn" data-module="backup">数据备份</button>
+    </div>
 
-        <!-- 竖占2格（1×2） -->
-        <div class="grid-item tall">
-            <a href="page2.html">
-                <img src="https://picsum.photos/300/600?random=2" alt="人像写真">
-                <div class="item-info">人像写真</div>
-            </a>
+    <!-- 部门管理 -->
+    <div class="content-module" id="dept">
+        <h2 class="module-title">部门管理</h2>
+        <div class="form-group">
+            <label>部门名称：</label>
+            <input type="text" id="deptName" placeholder="请输入部门名称" maxlength="20">
+            <button class="operate-btn add-btn" onclick="addDept()">新增部门</button>
         </div>
+        <div class="table-box">
+            <table class="data-table">
+                <thead>
+                    <tr><th>序号</th><th>部门名称</th><th>操作</th></tr>
+                </thead>
+                <tbody id="deptTable"></tbody>
+            </table>
+        </div>
+    </div>
 
-        <!-- 横占2格（2×1） -->
-        <div class="grid-item wide">
-            <a href="page3.html">
-                <img src="https://picsum.photos/600/300?random=3" alt="横版风景">
-                <div class="item-info">横版风景</div>
-            </a>
+    <!-- 货品清单 -->
+    <div class="content-module" id="goods">
+        <h2 class="module-title">货品清单管理</h2>
+        <div class="form-group">
+            <label>货品名称：</label>
+            <input type="text" id="goodsName" placeholder="请输入货品名称" maxlength="30">
+            <label>货品单位：</label>
+            <input type="text" id="goodsUnit" placeholder="如：个/支/箱" style="width:100px">
+            <label>低库存预警：</label>
+            <input type="number" id="warnStock" min="0" value="5" style="width:120px">
+            <button class="operate-btn add-btn" onclick="addGoods()">新增货品</button>
+            <button class="operate-btn export-btn" onclick="downloadGoodsTemplate()">下载导入模板</button>
+            <input type="file" id="goodsImportFile" class="file-input" onchange="importGoods(event)">
+            <label for="goodsImportFile" class="operate-btn warn-btn">批量导入货品</label>
         </div>
+        <div class="table-box">
+            <table class="data-table">
+                <thead>
+                    <tr><th>序号</th><th>货品名称</th><th>货品单位</th><th>低库存预警值</th><th>操作</th></tr>
+                </thead>
+                <tbody id="goodsTable"></tbody>
+            </table>
+        </div>
+    </div>
 
-        <!-- 普通单格（1×1） -->
-        <div class="grid-item">
-            <a href="page4.html">
-                <img src="https://picsum.photos/600/600?random=4" alt="生活碎片">
-                <div class="item-info">生活碎片</div>
-            </a>
+    <!-- 当前库存 -->
+    <div class="content-module show" id="stock">
+        <h2 class="module-title">当前总库存（含成本）</h2>
+        <div class="table-box">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>货品名称</th>
+                        <th>货品单位</th>
+                        <th>当前库存</th>
+                        <th>在库总成本</th>
+                        <th>加权平均单价</th>
+                        <th>预警数量</th>
+                    </tr>
+                </thead>
+                <tbody id="stockTable"></tbody>
+            </table>
         </div>
+    </div>
 
-        <!-- 占4格（2×2） -->
-        <div class="grid-item large">
-            <a href="page5.html">
-                <img src="https://picsum.photos/600/600?random=5" alt="重点作品">
-                <div class="item-info">年度重点作品</div>
-            </a>
+    <!-- 入库 -->
+    <div class="content-module" id="stockIn">
+        <h2 class="module-title">货品入库登记（含金额）</h2>
+        <div class="form-group">
+            <label>选择货品：</label>
+            <select id="inGoods"></select>
         </div>
+        <div class="form-group">
+            <label>货品单位：</label>
+            <div id="inUnit" class="unit-text">-</div>
+        </div>
+        <div class="form-group">
+            <label>入库数量：</label>
+            <input type="number" id="inNum" min="1" max="99999" step="1" placeholder="整数数量">
+        </div>
+        <div class="form-group">
+            <label>入库单价：</label>
+            <input type="number" id="inPrice" min="0" step="0.01" placeholder="元/单位">
+        </div>
+        <div class="form-group">
+            <label>入库总金额：</label>
+            <input type="number" id="inTotal" readonly placeholder="自动计算">
+        </div>
+        <div class="form-group">
+            <label>经手人：</label>
+            <input type="text" id="inUser" placeholder="经手人" maxlength="20" value="仓管员">
+        </div>
+        <button class="operate-btn submit-btn" onclick="doStockIn()">确认入库</button>
+        <div class="price-info">总金额 = 数量 × 单价，自动计算，仅支持2位小数</div>
+    </div>
 
-        <!-- 竖占2格（1×2） -->
-        <div class="grid-item tall">
-            <a href="page6.html">
-                <img src="https://picsum.photos/300/600?random=6" alt="建筑细节">
-                <div class="item-info">建筑细节</div>
-            </a>
+    <!-- 出库 -->
+    <div class="content-module" id="stockOut">
+        <h2 class="module-title">货品出库登记（自动分摊成本）</h2>
+        <div class="form-group">
+            <label>选择部门：</label>
+            <select id="outDept"></select>
         </div>
+        <div class="form-group">
+            <label>选择货品：</label>
+            <select id="outGoods"></select>
+        </div>
+        <div class="form-group">
+            <label>货品单位：</label>
+            <div id="outUnit" class="unit-text">-</div>
+        </div>
+        <div class="form-group">
+            <label>出库数量：</label>
+            <input type="number" id="outNum" min="1" max="99999" step="1" placeholder="整数数量">
+        </div>
+        <div class="form-group">
+            <label>本次分摊金额：</label>
+            <input type="number" id="outCost" readonly placeholder="自动计算">
+        </div>
+        <div class="form-group">
+            <label>领用人：</label>
+            <input type="text" id="outUser" placeholder="领用人" maxlength="20">
+        </div>
+        <div class="form-group">
+            <label>备注：</label>
+            <input type="text" id="outRemark" placeholder="特殊情况说明（选填）" maxlength="100" style="min-width: 400px;">
+        </div>
+        <button class="operate-btn submit-btn" onclick="doStockOut()">确认出库</button>
+        <div class="price-info">按先进先出规则自动计算出库成本，不可手动修改</div>
+    </div>
 
-        <!-- 横占2格（2×1） -->
-        <div class="grid-item wide">
-            <a href="page7.html">
-                <img src="https://picsum.photos/600/300?random=7" alt="海边日落">
-                <div class="item-info">海边日落（横版）</div>
-            </a>
+    <!-- 查询 -->
+    <div class="content-module" id="query">
+        <h2 class="module-title">数据汇总查询（含金额）</h2>
+        <div class="query-area">
+            <div>
+                <label>按部门查询：</label>
+                <select id="queryDept"></select>
+                <button class="operate-btn submit-btn" onclick="queryByDept()">查询</button>
+            </div>
+            <div>
+                <label>按货品查询：</label>
+                <select id="queryGoods"></select>
+                <button class="operate-btn submit-btn" onclick="queryByGoods()">查询</button>
+            </div>
+            <div>
+                <label>按月查询：</label>
+                <input type="month" id="queryMonth" style="min-width:160px">
+                <button class="operate-btn submit-btn" onclick="queryByMonth()">查询</button>
+            </div>
+            <div>
+                <label>类型筛选：</label>
+                <select id="queryType" style="min-width:120px">
+                    <option value="all">全部</option>
+                    <option value="入库">仅入库</option>
+                    <option value="出库">仅出库</option>
+                </select>
+            </div>
+            <div>
+                <button class="operate-btn submit-btn" onclick="queryAll()">显示全部</button>
+                <button class="operate-btn export-btn" onclick="exportData()">导出Excel</button>
+            </div>
         </div>
+        <div class="table-box">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>操作时间</th>
+                        <th>部门</th>
+                        <th>货品</th>
+                        <th>单位</th>
+                        <th>类型</th>
+                        <th>数量</th>
+                        <th>单价/成本</th>
+                        <th>金额</th>
+                        <th>经手/领用人</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody id="queryTbody"></tbody>
+            </table>
+        </div>
+    </div>
 
-        <!-- 普通单格（1×1） -->
-        <div class="grid-item">
-            <a href="page8.html">
-                <img src="https://picsum.photos/600/600?random=8" alt="静物摄影">
-                <div class="item-info">静物摄影</div>
-            </a>
+    <!-- 数据备份 -->
+    <div class="content-module" id="backup">
+        <h2 class="module-title">数据备份与还原</h2>
+        <div class="form-group">
+            <button class="operate-btn submit-btn" onclick="backupData()">导出JSON备份</button>
+            <input type="file" id="restoreFile" class="file-input" onchange="restoreData(event)">
+            <label for="restoreFile" class="operate-btn warn-btn">选择备份文件还原</label>
         </div>
-    </main>
+        <div class="form-group">
+            <button class="operate-btn danger-btn" onclick="clearAllData()">清空所有数据</button>
+        </div>
+        <div style="margin-top:20px;color:#666;font-size:30px;">
+            注意：清理浏览器缓存会删除数据！！
+           <br>请备份包含全量库存、成本批次、出入库流水，可防止浏览器清理导致的数据丢失
+        </div>
+    </div>
+
+    <!-- 修改货品弹窗 -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <h3 class="modal-title">修改货品信息</h3>
+            <div class="form-group">
+                <label>货品名称：</label>
+                <input type="text" id="editGoodsName" maxlength="30">
+            </div>
+            <div class="form-group">
+                <label>货品单位：</label>
+                <input type="text" id="editGoodsUnit" style="width:100px">
+            </div>
+            <div class="form-group">
+                <label>低库存预警：</label>
+                <input type="number" id="editWarnStock" min="0" style="width:120px">
+            </div>
+            <div style="text-align:center;margin-top:20px;">
+                <button class="operate-btn submit-btn" onclick="saveEditGoods()">保存修改</button>
+                <button class="operate-btn del-btn" onclick="closeEditModal()">取消</button>
+            </div>
+            <input type="hidden" id="editGoodsIndex">
+        </div>
+    </div>
+
+<script>
+// ====================== 基础数据初始化 ======================
+let deptList = JSON.parse(localStorage.getItem('deptList')) || [];
+let goodsList = JSON.parse(localStorage.getItem('goodsList')) || [];
+let stockBatches = JSON.parse(localStorage.getItem('stockBatches')) || {};
+let recordList = JSON.parse(localStorage.getItem('recordList')) || [];
+
+// ====================== 安全转义函数 ======================
+function escapeHtml(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+function escapeAttr(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str.replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+// ====================== 标签页切换 ======================
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.content-module').forEach(m => m.classList.remove('show'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.module).classList.add('show');
+    });
+});
+
+function goToDeptTab() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.content-module').forEach(m => m.classList.remove('show'));
+    document.querySelector('[data-module="dept"]').classList.add('active');
+    document.getElementById('dept').classList.add('show');
+}
+
+// ====================== 弹窗操作 ======================
+function openEditModal(index) {
+    const goods = goodsList[index];
+    document.getElementById('editGoodsIndex').value = index;
+    document.getElementById('editGoodsName').value = goods.name;
+    document.getElementById('editGoodsUnit').value = goods.unit || '';
+    document.getElementById('editWarnStock').value = goods.warn || 0;
+    document.getElementById('editModal').style.display = 'flex';
+}
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
+function saveEditGoods() {
+    const index = document.getElementById('editGoodsIndex').value;
+    const name = document.getElementById('editGoodsName').value.trim();
+    const unit = document.getElementById('editGoodsUnit').value.trim();
+    const warn = parseInt(document.getElementById('editWarnStock').value) || 0;
+    
+    if (!name) return alert('请输入货品名称');
+    if (warn < 0) return alert('预警值不能为负数');
+    if (goodsList.some((g, i) => i != index && g.name === name)) {
+        return alert('货品名称已存在');
+    }
+
+    const oldName = goodsList[index].name;
+    goodsList[index] = { name, unit, warn };
+    
+    if (oldName !== name && stockBatches[oldName]) {
+        stockBatches[name] = stockBatches[oldName];
+        delete stockBatches[oldName];
+    }
+
+    closeEditModal();
+    saveData();
+    refreshAllViews();
+    refreshSelects();
+    alert('货品信息修改成功');
+}
+
+// ====================== 数据保存 ======================
+function saveData() {
+    localStorage.setItem('deptList', JSON.stringify(deptList));
+    localStorage.setItem('goodsList', JSON.stringify(goodsList));
+    localStorage.setItem('stockBatches', JSON.stringify(stockBatches));
+    localStorage.setItem('recordList', JSON.stringify(recordList));
+}
+
+// ====================== 页面刷新 ======================
+function refreshAllViews() {
+    renderDept();
+    renderGoods();
+    renderStock();
+}
+function refreshSelects() {
+    renderSelect();
+}
+function refreshQueryResult() {
+    if (document.getElementById('query').classList.contains('show')) queryAll();
+}
+
+// ====================== 入库选择货品自动显示单位 ======================
+document.getElementById('inGoods').addEventListener('change', function(){
+    const gName = this.value;
+    const goods = goodsList.find(x => x.name === gName);
+    const unit = goods ? goods.unit : '-';
+    document.getElementById('inUnit').innerText = unit;
+    calcInTotal();
+});
+
+// ====================== 入库金额自动计算 ======================
+document.getElementById('inNum')?.addEventListener('input', calcInTotal);
+document.getElementById('inPrice')?.addEventListener('input', calcInTotal);
+function calcInTotal() {
+    const num = Math.floor(Number(document.getElementById('inNum').value) || 0);
+    const price = Number((Number(document.getElementById('inPrice').value) || 0).toFixed(2));
+    document.getElementById('inTotal').value = (num * price).toFixed(2);
+}
+
+// ====================== 部门管理 ======================
+function renderDept() {
+    const t = document.getElementById('deptTable');
+    t.innerHTML = deptList.length === 0
+        ? '<tr><td colspan="3">暂无部门</td></tr>'
+        : deptList.map((d,i) => `
+<tr>
+    <td>${i+1}</td>
+    <td>${escapeHtml(d)}</td>
+    <td><button class="operate-btn del-btn" onclick="delDept(${i})">删除</button></td>
+</tr>`).join('');
+}
+function addDept() {
+    const n = document.getElementById('deptName').value.trim();
+    if (!n) return alert('请输入部门名称');
+    if (deptList.includes(n)) return alert('该部门已存在');
+    deptList.push(n);
+    document.getElementById('deptName').value = '';
+    saveData();
+    refreshAllViews();
+    refreshSelects();
+    alert('部门添加成功');
+}
+function delDept(i) {
+    if (!confirm('确定删除该部门？历史记录将保留')) return;
+    deptList.splice(i,1);
+    saveData();
+    refreshAllViews();
+    refreshSelects();
+    alert('部门删除成功');
+}
+
+// ====================== 货品管理 ======================
+function renderGoods() {
+    const t = document.getElementById('goodsTable');
+    t.innerHTML = goodsList.length === 0
+        ? '<tr><td colspan="5">暂无货品</td></tr>'
+        : goodsList.map((g,i) => `
+<tr>
+    <td>${i+1}</td>
+    <td>${escapeHtml(g.name)}</td>
+    <td>${escapeHtml(g.unit || '-')}</td>
+    <td>${g.warn || 0}</td>
+    <td>
+        <button class="operate-btn edit-btn" onclick="openEditModal(${i})">修改</button>
+        <button class="operate-btn del-btn" onclick="delGoods(${i})">删除</button>
+    </td>
+</tr>`).join('');
+}
+function addGoods() {
+    const name = document.getElementById('goodsName').value.trim();
+    const unit = document.getElementById('goodsUnit').value.trim();
+    const warn = parseInt(document.getElementById('warnStock').value) || 0;
+    if (!name) return alert('请输入货品名称');
+    if (warn < 0) return alert('预警值不能为负数');
+    if (goodsList.some(x => x.name === name)) return alert('该货品已存在');
+    goodsList.push({ name, unit, warn });
+    if (!stockBatches[name]) stockBatches[name] = [];
+    document.getElementById('goodsName').value = '';
+    document.getElementById('goodsUnit').value = '';
+    document.getElementById('warnStock').value = 5;
+    saveData();
+    refreshAllViews();
+    refreshSelects();
+    alert('货品添加成功');
+}
+function delGoods(i) {
+    if (!confirm('确定删除该货品？对应库存将清空')) return;
+    const name = goodsList[i].name;
+    goodsList.splice(i,1);
+    delete stockBatches[name];
+    saveData();
+    refreshAllViews();
+    refreshSelects();
+    alert('货品删除成功');
+}
+
+// ====================== 库存渲染 ======================
+function renderStock() {
+    const t = document.getElementById('stockTable');
+    if (goodsList.length === 0) {
+        t.innerHTML = '<tr><td colspan="7">暂无货品</td></tr>';
+        return;
+    }
+    let html = '';
+    goodsList.forEach((g, idx) => {
+        const batches = stockBatches[g.name] || [];
+        const totalQty = batches.reduce((s, b) => s + b.qty, 0);
+        const totalAmt = batches.reduce((s, b) => s + b.qty * b.price, 0);
+        const avgPrice = totalQty > 0 ? (totalAmt / totalQty) : 0;
+        const low = totalQty <= (g.warn || 0);
+        html += `
+<tr>
+    <td>${idx+1}</td>
+    <td>${escapeHtml(g.name)}</td>
+    <td>${escapeHtml(g.unit || '-')}</td>
+    <td class="${low ? 'low-stock' : ''}">${totalQty}</td>
+    <td>${totalAmt.toFixed(2)}</td>
+    <td>${avgPrice.toFixed(2)}</td>
+    <td>${g.warn || 0}</td>
+</tr>`;
+    });
+    t.innerHTML = html;
+}
+
+// ====================== 下拉框渲染 ======================
+function renderSelect() {
+    // 入库货品
+    const ig = document.getElementById('inGoods');
+    ig.innerHTML = '<option value="">请选择货品</option>';
+    goodsList.forEach(g => {
+        ig.innerHTML += `<option value="${escapeAttr(g.name)}">${escapeHtml(g.name)}</option>`;
+    });
+
+    // 出库部门
+    const od = document.getElementById('outDept');
+    od.innerHTML = '<option value="">请选择部门</option>';
+    deptList.forEach(d => {
+        od.innerHTML += `<option value="${escapeAttr(d)}">${escapeHtml(d)}</option>`;
+    });
+
+    // 出库货品
+    const og = document.getElementById('outGoods');
+    og.innerHTML = '<option value="">请选择货品</option>';
+    goodsList.forEach(g => {
+        const qty = (stockBatches[g.name] || []).reduce((s, b) => s + b.qty, 0);
+        og.innerHTML += `<option value="${escapeAttr(g.name)}">${escapeHtml(g.name)}（库存：${qty}）</option>`;
+    });
+
+    // 查询部门
+    const qd = document.getElementById('queryDept');
+    qd.innerHTML = '<option value="">请选择部门</option>';
+    deptList.forEach(d => {
+        qd.innerHTML += `<option value="${escapeAttr(d)}">${escapeHtml(d)}</option>`;
+    });
+
+    // 查询货品
+    const qg = document.getElementById('queryGoods');
+    qg.innerHTML = '<option value="">请选择货品</option>';
+    goodsList.forEach(g => {
+        qg.innerHTML += `<option value="${escapeAttr(g.name)}">${escapeHtml(g.name)}</option>`;
+    });
+}
+
+// 出库选择货品自动显示单位
+document.getElementById('outGoods').addEventListener('change', function(){
+    const gName = this.value;
+    const goods = goodsList.find(x => x.name === gName);
+    const unit = goods ? goods.unit : '-';
+    document.getElementById('outUnit').innerText = unit;
+    calcOutCost();
+});
+
+// ====================== 入库操作 ======================
+function doStockIn() {
+    const g = document.getElementById('inGoods').value;
+    const qty = Math.floor(Number(document.getElementById('inNum').value) || 0);
+    const price = Number((Number(document.getElementById('inPrice').value) || 0).toFixed(2));
+    const total = Number(document.getElementById('inTotal').value || 0);
+    const user = document.getElementById('inUser').value.trim();
+
+    if (!g) return alert('请选择货品');
+    if (qty < 1 || !Number.isInteger(qty)) return alert('入库数量必须为正整数');
+    if (price < 0) return alert('单价不能为负数');
+    if (!user) return alert('请填写经手人');
+
+    if (!stockBatches[g]) stockBatches[g] = [];
+    stockBatches[g].push({ qty, price, createTime: fmtDate(new Date()) });
+
+    recordList.unshift({
+        time: fmtDate(new Date()), dept: '-', goods: g, type: '入库',
+        qty, price, amount: total, user, remark: ''
+    });
+
+    document.getElementById('inNum').value = '';
+    document.getElementById('inPrice').value = '';
+    document.getElementById('inTotal').value = '';
+
+    saveData();
+    renderStock();
+    refreshSelects();
+    refreshQueryResult();
+    alert('入库成功');
+}
+
+// ====================== 出库成本计算 ======================
+document.getElementById('outNum').addEventListener('input', calcOutCost);
+function calcOutCost() {
+    const g = document.getElementById('outGoods').value;
+    const need = Math.floor(Number(document.getElementById('outNum').value) || 0);
+    if (!g || need < 1) {
+        document.getElementById('outCost').value = '';
+        return;
+    }
+    const batches = JSON.parse(JSON.stringify(stockBatches[g] || []));
+    let left = need, cost = 0;
+    for (let b of batches) {
+        if (left <= 0) break;
+        const use = Math.min(left, b.qty);
+        cost += use * b.price;
+        left -= use;
+    }
+    document.getElementById('outCost').value = cost.toFixed(2);
+}
+
+// ====================== 出库操作 ======================
+function doStockOut() {
+    const dept = document.getElementById('outDept').value;
+    const g = document.getElementById('outGoods').value;
+    const need = Math.floor(Number(document.getElementById('outNum').value) || 0);
+    const cost = Number(document.getElementById('outCost').value || 0);
+    const user = document.getElementById('outUser').value.trim();
+    const remark = document.getElementById('outRemark').value.trim();
+
+    if (!dept) return alert('请选择部门');
+    if (!g) return alert('请选择货品');
+    if (need < 1 || !Number.isInteger(need)) return alert('出库数量必须为正整数');
+    if (!user) return alert('请填写领用人');
+
+    const batches = stockBatches[g] || [];
+    const totalStock = batches.reduce((s, b) => s + b.qty, 0);
+    if (totalStock < need) return alert(`库存不足，当前库存：${totalStock}`);
+
+    let left = need;
+    for (let i = 0; i < batches.length && left > 0; i++) {
+        const b = batches[i];
+        const use = Math.min(left, b.qty);
+        b.qty -= use;
+        left -= use;
+        if (b.qty === 0) {
+            batches.splice(i,1);
+            i--;
+        }
+    }
+
+    recordList.unshift({
+        time: fmtDate(new Date()), dept, goods: g, type: '出库',
+        qty: need, price: 0, amount: cost, user, remark
+    });
+
+    document.getElementById('outNum').value = '';
+    document.getElementById('outCost').value = '';
+    document.getElementById('outUser').value = '';
+    document.getElementById('outRemark').value = '';
+
+    saveData();
+    renderStock();
+    refreshSelects();
+    refreshQueryResult();
+    alert('出库成功');
+}
+
+// ====================== 查询功能 + 类型筛选 ======================
+function getQueryType() {
+    return document.getElementById('queryType').value;
+}
+
+function applyTypeFilter(list) {
+    const t = getQueryType();
+    if (t === 'all') return list;
+    return list.filter(x => x.type === t);
+}
+
+function queryByDept() {
+    const d = document.getElementById('queryDept').value;
+    if (!d) return alert('请选择部门');
+    renderResult(applyTypeFilter(recordList.filter(r => r.dept === d)));
+}
+function queryByGoods() {
+    const g = document.getElementById('queryGoods').value;
+    if (!g) return alert('请选择货品');
+    renderResult(applyTypeFilter(recordList.filter(r => r.goods === g)));
+}
+function queryByMonth() {
+    const month = document.getElementById('queryMonth').value;
+    if (!month) return alert('请选择查询月份');
+    renderResult(applyTypeFilter(recordList.filter(r => r.time.startsWith(month))));
+}
+function queryAll() {
+    renderResult(applyTypeFilter(recordList));
+}
+
+function renderResult(data) {
+    const tb = document.getElementById('queryTbody');
+    if (!data.length) {
+        tb.innerHTML = '<tr><td colspan="10">暂无数据</td></tr>';
+        window.exportDataList = [];
+        return;
+    }
+    tb.innerHTML = data.map(item => {
+        const goods = goodsList.find(g => g.name === item.goods);
+        const unit = goods ? goods.unit : '-';
+        return `
+<tr>
+    <td>${escapeHtml(item.time)}</td>
+    <td>${escapeHtml(item.dept)}</td>
+    <td>${escapeHtml(item.goods)}</td>
+    <td>${escapeHtml(unit)}</td>
+    <td>${escapeHtml(item.type)}</td>
+    <td>${item.qty}</td>
+    <td>${item.type === '入库' ? item.price.toFixed(2) : '-'}</td>
+    <td>${item.amount.toFixed(2)}</td>
+    <td>${escapeHtml(item.user)}</td>
+    <td>${escapeHtml(item.remark)}</td>
+</tr>`;
+    }).join('');
+    window.exportDataList = data;
+}
+
+// ====================== Excel导出 ======================
+function exportData() {
+    if (!window.exportDataList || window.exportDataList.length === 0) return alert('暂无数据可导出');
+    const excelData = [['操作时间','部门','货品','单位','类型','数量','单价/成本','金额','经手/领用人','备注']];
+    window.exportDataList.forEach(item => {
+        const goods = goodsList.find(g => g.name === item.goods);
+        const unit = goods ? goods.unit : '-';
+        excelData.push([
+            item.time, item.dept, item.goods, unit, item.type, item.qty,
+            item.type === '入库' ? item.price.toFixed(2) : '',
+            item.amount.toFixed(2), item.user, item.remark
+        ]);
+    });
+    const ws = XLSX.utils.aoa_to_sheet(excelData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, '仓库流水');
+    XLSX.writeFile(wb, `仓库流水_${fmtDateFileName(new Date())}.xlsx`);
+}
+
+// ====================== 日期格式化 ======================
+function fmtDate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    const h = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+    const s = String(d.getSeconds()).padStart(2,'0');
+    return `${y}-${m}-${day} ${h}:${mi}:${s}`;
+}
+function fmtDateFileName(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    const h = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+    return `${y}${m}${day}_${h}${mi}`;
+}
+
+// ====================== 备份/还原/清空 ======================
+function backupData() {
+    const backup = { deptList, goodsList, stockBatches, recordList, backupTime: fmtDate(new Date()) };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `仓库全量备份_${fmtDateFileName(new Date())}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+function restoreData(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = evt => {
+        try {
+            const data = JSON.parse(evt.target.result);
+            deptList = data.deptList || [];
+            goodsList = data.goodsList || [];
+            stockBatches = data.stockBatches || {};
+            recordList = data.recordList || [];
+            saveData();
+            refreshAllViews();
+            refreshSelects();
+            alert('数据还原成功');
+        } catch (e) {
+            alert('备份文件格式错误');
+        }
+        document.getElementById('restoreFile').value = '';
+    };
+    reader.readAsText(file);
+}
+function clearAllData() {
+    if (!confirm('警告：将清空所有数据，无法恢复！')) return;
+    if (!confirm('二次确认：确定清空所有数据？')) return;
+    deptList = [];
+    goodsList = [];
+    stockBatches = {};
+    recordList = [];
+    saveData();
+    refreshAllViews();
+    refreshSelects();
+    goToDeptTab();
+    alert('所有数据已清空');
+}
+
+// ====================== 货品Excel模板+批量导入 ======================
+function downloadGoodsTemplate() {
+    const template = [['货品名称', '货品单位', '低库存预警值']];
+    const ws = XLSX.utils.aoa_to_sheet(template);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, '货品导入模板');
+    XLSX.writeFile(wb, '货品批量导入模板.xlsx');
+}
+function importGoods(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+        try {
+            const wb = XLSX.read(ev.target.result, { type: 'binary' });
+            const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+            let success = 0;
+            data.forEach(row => {
+                const name = (row['货品名称'] || '').trim();
+                const unit = (row['货品单位'] || '').trim();
+                const warn = parseInt(row['低库存预警值']) || 0;
+                if (name && !goodsList.some(x => x.name === name) && warn >= 0) {
+                    goodsList.push({ name, unit, warn });
+                    if (!stockBatches[name]) stockBatches[name] = [];
+                    success++;
+                }
+            });
+            saveData();
+            refreshAllViews();
+            refreshSelects();
+            alert(`批量导入完成，成功导入 ${success} 个货品`);
+        } catch (err) {
+            alert('导入失败，请使用系统提供的模板');
+        }
+        document.getElementById('goodsImportFile').value = '';
+    };
+    reader.readAsBinaryString(file);
+}
+
+// ====================== 页面初始化 ======================
+window.onload = () => {
+    refreshAllViews();
+    refreshSelects();
+    renderResult([]);
+};
+</script>
 </body>
 </html>
